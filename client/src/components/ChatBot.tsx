@@ -30,8 +30,8 @@ const ChatBot: React.FC = () => {
     setLoading(true);
     try {
       // Call backend Gemini API
-      const res = await const API_URL = process.env.REACT_APP_API_URL;
-fetch(`${API_URL}/api/gemini-chat`, {
+      const API_URL = process.env.REACT_APP_API_URL;
+const res = await fetch(`${API_URL}/api/gemini-chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ prompt: input })
