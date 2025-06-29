@@ -17,6 +17,8 @@ interface Message {
   createdAt: string;
 }
 
+const API_URL = process.env.REACT_APP_API_URL;
+
 const Messages: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [loading, setLoading] = useState(true);
@@ -32,7 +34,7 @@ const Messages: React.FC = () => {
   const fetchMessages = async () => {
     setLoading(true);
     try {
-      const res = await fetch('http://localhost:5000/api/messages', {
+      const res = await fetch(`${API_URL}/api/messages`, {
         headers: { Authorization: token ? `Bearer ${token}` : '' },
       });
       const data = await res.json();
@@ -53,7 +55,7 @@ const Messages: React.FC = () => {
     // Mark as read if unread
     const msg = messages.find(m => m._id === id);
     if (msg && !msg.read) {
-      fetch(`http://localhost:5000/api/messages/${id}/read`, {
+      fetch(`${API_URL}/api/messages/${id}/read`, {
         method: 'PATCH',
         headers: { Authorization: token ? `Bearer ${token}` : '' },
       }).then(() => fetchMessages());
@@ -64,7 +66,7 @@ const Messages: React.FC = () => {
     setSubmitting(true);
     setFeedback(null);
     try {
-      const res = await fetch('http://localhost:5000/api/messages/support', {
+      const res = await fetch(`${API_URL}/api/messages/support`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

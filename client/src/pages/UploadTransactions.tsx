@@ -5,6 +5,9 @@ import CloseIcon from '@mui/icons-material/Close';
 import { Box, Typography, Button, TextField } from '@mui/material';
 
 import DashboardLayout from '../components/DashboardLayout';
+
+const API_URL = process.env.REACT_APP_API_URL;
+
 const UploadTransactions: React.FC = () => {
   const [jsonText, setJsonText] = useState('');
   const [status, setStatus] = useState<string | null>(null);
@@ -49,7 +52,7 @@ const UploadTransactions: React.FC = () => {
     }
     try {
       const token = localStorage.getItem('token');
-      const res = await fetch('http://localhost:5000/api/transactions/upload', {
+      const res = await fetch(`${API_URL}/api/transactions/upload`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

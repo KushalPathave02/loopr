@@ -15,11 +15,17 @@ server/build/
 .DS_Store
 Thumbs.db
 
-# Env files
+# Env files (ignore real .env files, but allow .env.example for sharing templates)
 client/.env
-client/.env.*
+client/.env.local
+client/.env.development
+client/.env.production
+!client/.env.example
 server/.env
-server/.env.*
+server/.env.local
+server/.env.development
+server/.env.production
+!server/.env.example
 
 # IDE settings
 .vscode/

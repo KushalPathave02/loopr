@@ -47,12 +47,18 @@ const Dashboard: React.FC = () => {
   const [graphFilterType, setGraphFilterType] = useState<'all' | 'category' | 'status'>('all');
 
   useEffect(() => {
+    const API_URL = process.env.REACT_APP_API_URL;
     const fetchTransactions = async () => {
       setLoading(true);
       setError(null);
+      if (!API_URL) {
+        setError('API URL not set. Please configure REACT_APP_API_URL in your .env file.');
+        setLoading(false);
+        return;
+      }
       try {
         const token = localStorage.getItem('token');
-        const res = await fetch('http://localhost:5000/api/transactions?page=1&pageSize=10000', {
+        const res = await fetch(`${API_URL}/api/transactions?page=1&pageSize=10000`, {
           headers: {
             Authorization: token ? `Bearer ${token}` : '',
           },

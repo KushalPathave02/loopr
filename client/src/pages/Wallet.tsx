@@ -5,6 +5,7 @@ import {
 import CloseIcon from '@mui/icons-material/Close';
 import DashboardLayout from '../components/DashboardLayout';
 
+const API_URL = process.env.REACT_APP_API_URL;
 const Wallet: React.FC = () => {
   const [balance, setBalance] = useState<number | null>(null);
   const [amount, setAmount] = useState('');
@@ -19,8 +20,13 @@ const Wallet: React.FC = () => {
   const fetchBalance = async () => {
     setLoading(true);
     setError(null);
+    if (!API_URL) {
+      setError('API URL not set. Please configure REACT_APP_API_URL in your .env file.');
+      setLoading(false);
+      return;
+    }
     try {
-      const res = await fetch(`http://localhost:5000/api/wallet/${userId}/balance`, {
+      const res = await fetch(`${API_URL}/api/wallet/${userId}/balance`, {
         headers: { Authorization: token ? `Bearer ${token}` : '' }
       });
       const data = await res.json();
@@ -33,8 +39,12 @@ const Wallet: React.FC = () => {
   };
 
   const fetchHistory = async () => {
+    if (!API_URL) {
+      setError('API URL not set. Please configure REACT_APP_API_URL in your .env file.');
+      return;
+    }
     try {
-      const res = await fetch(`http://localhost:5000/api/wallet/${userId}/history`, {
+      const res = await fetch(`${API_URL}/api/wallet/${userId}/history`, {
         headers: { Authorization: token ? `Bearer ${token}` : '' }
       });
       const data = await res.json();
@@ -51,11 +61,17 @@ const Wallet: React.FC = () => {
   }, []);
 
   const handleAction = async (type: 'add' | 'withdraw') => {
+    const API_URL = process.env.REACT_APP_API_URL;
     setError(null);
     setSuccess(null);
     setLoading(true);
+    if (!API_URL) {
+      setError('API URL not set. Please configure REACT_APP_API_URL in your .env file.');
+      setLoading(false);
+      return;
+    }
     try {
-      const res = await fetch(`http://localhost:5000/api/wallet/${userId}/${type}`, {
+      const res = await fetch(`${API_URL}/api/wallet/${userId}/${type}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

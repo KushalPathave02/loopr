@@ -48,12 +48,18 @@ const Analytics: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchAnalytics = async () => {
+    const API_URL = process.env.REACT_APP_API_URL;
+const fetchAnalytics = async () => {
       setLoading(true);
       setError(null);
+      if (!API_URL) {
+        setError('API URL not set. Please configure REACT_APP_API_URL in your .env file.');
+        setLoading(false);
+        return;
+      }
       try {
         const token = localStorage.getItem('token');
-        const res = await fetch('http://localhost:5000/api/analytics', {
+        const res = await fetch(`${API_URL}/api/analytics`, {
           headers: { Authorization: token ? `Bearer ${token}` : '' },
         });
         const json = await res.json();

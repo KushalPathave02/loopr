@@ -6,6 +6,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import { useNavigate } from 'react-router-dom';
 import DashboardLayout from '../components/DashboardLayout';
 
+const API_URL = process.env.REACT_APP_API_URL;
 const Personal: React.FC = () => {
   const [profile, setProfile] = useState<any>(null);
   const [loading, setLoading] = useState(true);
@@ -19,55 +20,55 @@ const Personal: React.FC = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchProfile = async () => {
-      setLoading(true);
-      const token = localStorage.getItem('token');
-      // Assume user id is in localStorage or decoded from JWT
-      const userId = localStorage.getItem('userId');
-      try {
-        const res = await fetch(`http://localhost:5000/api/users/${userId}`, {
-          headers: { Authorization: token ? `Bearer ${token}` : '' },
-        });
-        const data = await res.json();
-        setProfile(data);
-        setForm({
-          name: data.name || '',
-          email: data.email || '',
-          role: data.role || '',
-          joinDate: data.joinDate ? data.joinDate.slice(0,10) : '',
-          profilePic: data.profilePic || ''
-        });
-        // No longer store profilePic in localStorage; always use backend profilePic
-        setTwoFA(!!data.twoFAEnabled);
-      } catch {
-        setProfile(null);
-      }
-      setLoading(false);
-    };
-    fetchProfile();
-  }, []);
-
-  const handleEdit = () => setEditMode(true);
-  const handleCancel = () => { setEditMode(false); setForm(profile); };
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
-  const handleSave = async () => {
-    setSaving(true);
+  const fetchProfile = async () => {
+    setLoading(true);
     const token = localStorage.getItem('token');
     const userId = localStorage.getItem('userId');
     try {
-      const res = await fetch(`http://localhost:5000/api/users/${userId}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json', Authorization: token ? `Bearer ${token}` : '' },
-        body: JSON.stringify(form)
+      const res = await fetch(`${API_URL}/api/users/${userId}`, {
+        headers: { Authorization: token ? `Bearer ${token}` : '' },
       });
-      if (res.ok) {
-        setEditMode(false);
-        setProfile({ ...profile, ...form });
-      }
-    } finally { setSaving(false); }
+      const data = await res.json();
+      setProfile(data);
+      setForm({
+        name: data.name || '',
+        email: data.email || '',
+        role: data.role || '',
+        joinDate: data.joinDate ? data.joinDate.slice(0,10) : '',
+        profilePic: data.profilePic || ''
+      });
+      setTwoFA(!!data.twoFAEnabled);
+    } catch {
+      setProfile(null);
+    }
+    setLoading(false);
   };
+  fetchProfile();
+}, []);
+
+  const handleEdit = (): void => setEditMode(true);
+  const handleCancel = (): void => { setEditMode(false); setForm(profile); };
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  setForm({ ...form, [e.target.name]: e.target.value });
+};
+  const handleSave = async () => {
+  setSaving(true);
+  const token = localStorage.getItem('token');
+  const userId = localStorage.getItem('userId');
+  try {
+    const res = await fetch(`${API_URL}/api/users/${userId}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json', Authorization: token ? `Bearer ${token}` : '' },
+      body: JSON.stringify(form)
+    });
+    if (res.ok) {
+      setEditMode(false);
+      setProfile({ ...profile, ...form });
+    }
+  } finally {
+    setSaving(false);
+  }
+};
   const handlePasswordChange = async () => {
     setPasswordMsg('');
     if (passwords.new !== passwords.confirm) {
@@ -99,7 +100,7 @@ const Personal: React.FC = () => {
           </IconButton>
 
         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mb: 4 }}>
-            <Avatar src={form.profilePic ? (form.profilePic.startsWith('http') ? form.profilePic : `http://localhost:5000${form.profilePic}`) : undefined} sx={{ width: 100, height: 100, mb: 2, fontSize: 44, border: '3px solid #7c3aed', boxShadow: 3 }}>
+            <Avatar src={form.profilePic ? (form.profilePic.startsWith('http') ? form.profilePic : `${API_URL}${form.profilePic}`) : undefined} sx={{ width: 100, height: 100, mb: 2, fontSize: 44, border: '3px solid #7c3aed', boxShadow: 3 }}>
               {form.name ? form.name[0].toUpperCase() : '?'}
             </Avatar>
             {editMode ? (
@@ -122,7 +123,7 @@ const Personal: React.FC = () => {
                       const formData = new FormData();
                       formData.append('profilePic', file);
                       try {
-                        const res = await fetch(`http://localhost:5000/api/users/${userId}/profile-pic`, {
+                        const res = await fetch(`${API_URL}/api/users/${userId}/profile-pic`, {
                           method: 'POST',
                           headers: { Authorization: token ? `Bearer ${token}` : '' },
                           body: formData,
@@ -198,7 +199,7 @@ const Personal: React.FC = () => {
               const token = localStorage.getItem('token');
               const userId = localStorage.getItem('userId');
               try {
-                const res = await fetch(`http://localhost:5000/api/users/${userId}/password`, {
+                const res = await fetch(`${API_URL}/api/users/${userId}/password`, {
                   method: 'PUT',
                   headers: { 'Content-Type': 'application/json', Authorization: token ? `Bearer ${token}` : '' },
                   body: JSON.stringify(passwords)
