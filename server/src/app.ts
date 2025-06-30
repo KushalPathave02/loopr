@@ -35,7 +35,10 @@ app.get('/', (_req, res) => {
   res.send('Financial Analytics Dashboard API');
 });
 
-// Routes
+// Serve static files from the React app
+app.use(express.static(path.join(__dirname, '../../client/build')));
+
+// API routes
 import authRoutes from './routes/auth';
 import dashboardRoutes from './routes/dashboard';
 import transactionRoutes from './routes/transactions';
@@ -58,5 +61,10 @@ app.use('/api/users', usersRoute);
 app.use('/api/wallet', walletRoute);
 app.use('/api/messages', messagesRoutes);
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
+
+// Catch-all: send back React's index.html for any non-API route
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../../client/build', 'index.html'));
+});
 
 export default app;
