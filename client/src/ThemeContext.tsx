@@ -26,6 +26,15 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     document.body.className = theme;
     localStorage.setItem('theme', theme);
+
+    // Set CSS variables for background and text color
+    if (theme === 'dark') {
+      document.documentElement.style.setProperty('--bg-color', '#181a29');
+      document.documentElement.style.setProperty('--text-color', '#fff');
+    } else {
+      document.documentElement.style.setProperty('--bg-color', '#f4f6fa');
+      document.documentElement.style.setProperty('--text-color', '#23263a');
+    }
   }, [theme]);
 
   const toggleTheme = () => setTheme((prev) => (prev === 'light' ? 'dark' : 'light'));

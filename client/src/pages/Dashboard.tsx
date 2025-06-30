@@ -6,6 +6,7 @@ import LineChartInfographic from '../components/LineChartInfographic';
 import { getMonthlyRevenueExpenses } from '../components/LineChartInfographicData';
 import { TextField, MenuItem, IconButton, Button, Menu, MenuItem as MuiMenuItem, ToggleButtonGroup, ToggleButton } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
+import { useTheme } from '@mui/material/styles';
 
 interface Transaction {
   _id: string;
@@ -18,6 +19,7 @@ interface Transaction {
 
 const Dashboard: React.FC = () => {
   const { currency } = useCurrency();
+  const theme = useTheme();
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
