@@ -9,6 +9,12 @@ const botAvatar = (
   </Box>
 );
 
+type GeminiChatResponse = {
+  text?: string;
+  error?: string;
+  [key: string]: any;
+};
+
 const ChatBot: React.FC = () => {
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState<{from: 'user'|'bot', text: string}[]>([]);
@@ -31,19 +37,29 @@ const ChatBot: React.FC = () => {
     try {
       // Call backend Gemini API
       const API_URL = process.env.REACT_APP_API_URL;
-const res = await fetch(`${API_URL}/api/gemini-chat`, {
+      const res = await fetch(`${API_URL}/gemini-chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ prompt: input })
       });
-      const data = await res.json();
+      let data: GeminiChatResponse;
+      try {
+        data = await res.json();
+      } catch (jsonErr) {
+        // Try to read as text for debugging
+        const text = await res.text();
+        console.error('Failed to parse JSON from /api/gemini-chat:', text);
+        setMessages(msgs => [...msgs, { from: 'bot', text: 'Error: Received invalid response from server.' }]);
+        setLoading(false);
+        return;
+      }
       if (res.ok && data.text) {
-        setMessages(msgs => [...msgs, { from: 'bot', text: data.text }]);
+        setMessages(msgs => [...msgs, { from: 'bot', text: data.text ?? '' }]);
       } else {
-        setMessages(msgs => [...msgs, { from: 'bot', text: data.error || 'No response from Gemini AI.' }]);
+        setMessages(msgs => [...msgs, { from: 'bot', text: data.error ?? 'No response from Gemini AI.' }]);
       }
       setLoading(false);
-    } catch {
+    } catch (err) {
       setMessages(msgs => [...msgs, { from: 'bot', text: 'Sorry, something went wrong.' }]);
       setLoading(false);
     }

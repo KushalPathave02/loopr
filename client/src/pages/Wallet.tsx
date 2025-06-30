@@ -26,7 +26,7 @@ const Wallet: React.FC = () => {
       return;
     }
     try {
-      const res = await fetch(`${API_URL}/api/wallet/${userId}/balance`, {
+      const res = await fetch(`${API_URL}/wallet/${userId}/balance`, {
         headers: { Authorization: token ? `Bearer ${token}` : '' }
       });
       const data = await res.json();
@@ -44,7 +44,7 @@ const Wallet: React.FC = () => {
       return;
     }
     try {
-      const res = await fetch(`${API_URL}/api/wallet/${userId}/history`, {
+      const res = await fetch(`${API_URL}/wallet/${userId}/history`, {
         headers: { Authorization: token ? `Bearer ${token}` : '' }
       });
       const data = await res.json();
@@ -71,7 +71,7 @@ const Wallet: React.FC = () => {
       return;
     }
     try {
-      const res = await fetch(`${API_URL}/api/wallet/${userId}/${type}`, {
+      const res = await fetch(`${API_URL}/wallet/${userId}/${type}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

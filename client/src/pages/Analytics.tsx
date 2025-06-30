@@ -59,7 +59,7 @@ const fetchAnalytics = async () => {
       }
       try {
         const token = localStorage.getItem('token');
-        const res = await fetch(`${API_URL}/api/analytics`, {
+        const res = await fetch(`${API_URL}/analytics`, {
           headers: { Authorization: token ? `Bearer ${token}` : '' },
         });
         const json = await res.json();

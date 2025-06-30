@@ -52,7 +52,7 @@ const UploadTransactions: React.FC = () => {
     }
     try {
       const token = localStorage.getItem('token');
-      const res = await fetch(`${API_URL}/api/transactions/upload`, {
+      const res = await fetch(`${API_URL}/transactions/upload`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

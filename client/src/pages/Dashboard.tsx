@@ -58,7 +58,7 @@ const Dashboard: React.FC = () => {
       }
       try {
         const token = localStorage.getItem('token');
-        const res = await fetch(`${API_URL}/api/transactions?page=1&pageSize=10000`, {
+        const res = await fetch(`${API_URL}/transactions?page=1&pageSize=10000`, {
           headers: {
             Authorization: token ? `Bearer ${token}` : '',
           },

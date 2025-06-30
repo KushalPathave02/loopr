@@ -37,7 +37,7 @@ const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({ children }) 
       setProfileLoading(true);
       const token = localStorage.getItem('token');
       const API_URL = process.env.REACT_APP_API_URL;
-fetch(`${API_URL}/api/users/profile`, {
+fetch(`${API_URL}/users/profile`, {
         headers: {
           Authorization: token ? `Bearer ${token}` : '',
         },

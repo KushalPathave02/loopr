@@ -25,7 +25,7 @@ const Personal: React.FC = () => {
     const token = localStorage.getItem('token');
     const userId = localStorage.getItem('userId');
     try {
-      const res = await fetch(`${API_URL}/api/users/${userId}`, {
+      const res = await fetch(`${API_URL}/users/${userId}`, {
         headers: { Authorization: token ? `Bearer ${token}` : '' },
       });
       const data = await res.json();
@@ -56,7 +56,7 @@ const Personal: React.FC = () => {
   const token = localStorage.getItem('token');
   const userId = localStorage.getItem('userId');
   try {
-    const res = await fetch(`${API_URL}/api/users/${userId}`, {
+    const res = await fetch(`${API_URL}/users/${userId}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json', Authorization: token ? `Bearer ${token}` : '' },
       body: JSON.stringify(form)
@@ -123,7 +123,7 @@ const Personal: React.FC = () => {
                       const formData = new FormData();
                       formData.append('profilePic', file);
                       try {
-                        const res = await fetch(`${API_URL}/api/users/${userId}/profile-pic`, {
+                        const res = await fetch(`${API_URL}/users/${userId}/profile-pic`, {
                           method: 'POST',
                           headers: { Authorization: token ? `Bearer ${token}` : '' },
                           body: formData,
@@ -199,7 +199,7 @@ const Personal: React.FC = () => {
               const token = localStorage.getItem('token');
               const userId = localStorage.getItem('userId');
               try {
-                const res = await fetch(`${API_URL}/api/users/${userId}/password`, {
+                const res = await fetch(`${API_URL}/users/${userId}/password`, {
                   method: 'PUT',
                   headers: { 'Content-Type': 'application/json', Authorization: token ? `Bearer ${token}` : '' },
                   body: JSON.stringify(passwords)

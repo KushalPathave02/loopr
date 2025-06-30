@@ -21,7 +21,7 @@ const Login: React.FC = () => {
       return;
     }
     try {
-      const res = await fetch(`${API_URL}/api/auth/login`, {
+      const res = await fetch(`${API_URL}/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password })
@@ -44,10 +44,7 @@ const Login: React.FC = () => {
 
   return (
     <div style={{ position: 'relative', minHeight: '100vh', width: '100vw', overflow: 'hidden' }}>
-      {/* 3D Spline Background */}
-      <div style={{ position: 'absolute', inset: 0, zIndex: 0 }}>
-        <Spline scene="https://prod.spline.design/6F5i6QkG6kqQj6wK/scene.splinecode" />
-      </div>
+
       {/* Login Form Overlay */}
       <div style={{ position: 'relative', zIndex: 2, maxWidth: 370, width: '100%', background: 'linear-gradient(120deg, #23263a 0%, #7c3aed 100%)', borderRadius: 20, padding: 40, boxShadow: '0 6px 32px rgba(44,62,80,0.18)', color: '#fff', display: 'flex', flexDirection: 'column', alignItems: 'center', margin: '0 auto', top: '50%', transform: 'translateY(25vh)' }}>
         <div style={{ fontWeight: 800, fontSize: 26, letterSpacing: 1, marginBottom: 24, color: '#7c3aed' }}>FinanceDash</div>
