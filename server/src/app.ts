@@ -15,7 +15,8 @@ app.use(express.json());
 const allowedOrigins = [
   'http://localhost:3000',
   'http://localhost:3001',
-  'https://loopr-1.onrender.com',  // replace with actual URL if needed
+  'https://loopr-1.onrender.com',  // previous render deployment
+  'https://loopr.vercel.app' // Vercel deployment
 ];
 
 app.use(cors({
@@ -58,25 +59,4 @@ app.use('/api/wallet', walletRoute);
 app.use('/api/messages', messagesRoutes);
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
-// MongoDB connection
-const mongoUri = process.env.MONGODB_URI || '';
-
-if (!mongoUri) {
-  console.error('FATAL ERROR: MONGODB_URI is not defined in the .env file.');
-  process.exit(1);
-}
-
-console.log('Attempting to connect to MongoDB...');
-mongoose.connect(mongoUri)
-  .then(() => {
-    console.log('MongoDB connected successfully.');
-    // Start server only after a successful database connection
-    const PORT = process.env.PORT || 5001;
-    app.listen(PORT, () => {
-      console.log(`Server running on port ${PORT}`);
-    });
-  })
-  .catch((err) => {
-    console.error('MongoDB connection error:', err);
-    process.exit(1);
-  });
+export default app;
